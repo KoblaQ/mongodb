@@ -9,6 +9,11 @@ app.engine(
   "handlebars",
   exphbs.engine({
     defaultLayout: "main",
+    // Allows us to pass data from mongodb into handlebars without the error.
+    // runtimeOptions: {
+    //   allowProtoPropertiesByDefault: true,
+    //   allowProtoMethodsByDefault: true,
+    // },
   })
 );
 
@@ -79,11 +84,32 @@ app.get("/", (req, res) => {
 // SET VIEW ENGINE FOR HANDLEBARS
 app.set("view engine", "handlebars");
 
+/*API
 app.get("/products", async (req, res) => {
   try {
     const result = await Product.find();
     res.json(result);
   } catch (error) {
+    console.log(error);
+  }
+});
+
+
+*/
+
+// Create Products webpage and list all the resources
+app.get("/products", async (req, res) => {
+  try {
+    const products = await Product.find();
+    // res.json(result);
+    res.render("products", {
+      title: "Our Products",
+      products: products.map((doc) => doc.toJSON()),
+    });
+  } catch (error) {
+    res.status(404).render("products", {
+      title: "We got an error here",
+    });
     console.log(error);
   }
 });
