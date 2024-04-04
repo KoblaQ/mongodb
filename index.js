@@ -120,3 +120,10 @@ app.get("/products/:id", async (req, res) => {
   // Best practice is to have a try catch here but we overlook that for now
   res.json(product);
 });
+
+// CREATE A DOCUMENT, ADD TO MONGODB, SUBMIT DATA FROM WEB FORM
+
+// Route for form page
+app.get("/add-product", (req, res) => {
+  res.render("add-product");
+});
