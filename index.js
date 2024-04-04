@@ -2,7 +2,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const exphbs = require("express-handlebars");
 require("dotenv").config();
+
 const app = express();
+// With this middleware we can get the data from HTML form
+app.use(express.urlencoded({ extended: false })); // Necessary for posting from the form
 
 // Set default settings for Handlebars
 app.engine(
@@ -126,4 +129,11 @@ app.get("/products/:id", async (req, res) => {
 // Route for form page
 app.get("/add-product", (req, res) => {
   res.render("add-product");
+});
+
+// Route for creating the resource
+app.post("/products", async (req, res) => {
+  const newProduct = new Product(req.body);
+  await newProduct.save();
+  res.send("<h1>Product added</h1>");
 });
